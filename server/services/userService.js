@@ -16,7 +16,8 @@ module.exports = {
             return await db.collection("user").insertOne({
                 email: userInfo.email,
                 nickname: userInfo.nickname,
-                password: hashPassword
+                password: hashPassword,
+                eventCheck: userInfo.eventCheck
             });
         } catch(e) {
             throw(e);

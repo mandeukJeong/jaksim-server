@@ -7,9 +7,9 @@ module.exports = {
             return res.status(400).json({
                 message: "Invalid request body. Must include email, nickname and password"
             });     
-        } else if (!req.body.serviceCheck || !req.body.personalCheck) {
+        } else if (!req.body.serviceCheck || !req.body.personalCheck || req.body.eventCheck === undefined) {
             return res.status(400).json({
-                message: "Invalid request body. Must check serviceCheck, personalCheck"
+                message: "Invalid request body. Must check serviceCheck, personalCheck and eventCheck"
             });      
         }
         try {
