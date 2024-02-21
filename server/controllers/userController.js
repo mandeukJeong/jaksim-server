@@ -17,7 +17,12 @@ module.exports = {
             return res.status(201).json(newUser);
             
         } catch(e) {
-            return res.status(500).json({ error: e.message });
+            // 중복된 이메일로 회원가입 요청 시
+            if (e.code === 400) {
+                return res.status(e.code).json({ error: e.message });
+            } else {
+                return res.status(500).json({ error: e.message });
+            }
         }
     }
 }
