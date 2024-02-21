@@ -5,10 +5,14 @@ const express = require('express');
 const app = express();
 const connectDB = require('./db/connect.js');
 const methodOverride = require('method-override');
+const passport = require("passport");
+const passportConfig = require("./passport");
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride('_method'));
+app.use(passport.initialize());
+passportConfig();
 
 let db;
 connectDB.then((client) => {
@@ -22,3 +26,9 @@ connectDB.then((client) => {
 });
 
 app.use("/user", require("./routes/userRoute.js"));
+
+// token test
+app.get("/test", passport.authenticate("jwt", { session: false }), async (req, res) => {
+    const result = await db.collection("test").find().toArray();
+    res.send(result);
+})

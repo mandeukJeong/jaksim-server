@@ -1,4 +1,6 @@
 const userService = require('../services/userService');
+const passport = require("passport");
+const jwt = require("jsonwebtoken");
 
 module.exports = {
     registerUser: async (req, res) => {
@@ -23,6 +25,28 @@ module.exports = {
             } else {
                 return res.status(500).json({ error: e.message });
             }
+        }
+    },
+
+    loginUser: async (req, res, next) => {
+        try {
+            passport.authenticate("local", (error, user, info) => {
+                if (error) {
+                    return res.status(500).json(error);
+                }
+                if (!user) {
+                    return res.status(401).json(info.message);
+                }
+                req.login(user, { session: false }, (err) => {
+                    if (err) {
+                        return res.send(err);
+                    }
+                    const token = jwt.sign({ id: user.email }, process.env.JWT_SECRET_KEY);
+                    res.status(200).json({token});
+                });
+            })(req, res, next);
+        } catch(e) {
+            console.log(e);
         }
     }
 }
