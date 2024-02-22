@@ -6,7 +6,7 @@ const app = express();
 const connectDB = require('./db/connect.js');
 const methodOverride = require('method-override');
 const passport = require("passport");
-const passportConfig = require("./passport");
+const passportConfig = require("./module/passport.js");
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));

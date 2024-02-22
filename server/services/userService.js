@@ -1,5 +1,6 @@
 const bcrypt = require("bcrypt");
 const connectDB = require("../db/connect");
+const mailer = require("../module/mail");
 
 let db;
 connectDB.then((client) => {
@@ -29,5 +30,20 @@ module.exports = {
         } catch(e) {
             throw(e);
         }    
+    },
+
+    sendEmail: async (emailInfo) => {
+        try {
+            const isUser = await db.collection("user").findOne({ email: emailInfo.toEmail });
+            if (!isUser) {
+                const error = new Error("존재하지 않는 계정입니다.");
+                error.code = 404;
+                throw error;
+            } else {
+                return mailer.sendMail(emailInfo);
+            }
+        } catch (e) {
+            throw(e);
+        }
     }
 };  
