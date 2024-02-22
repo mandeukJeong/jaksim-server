@@ -45,5 +45,15 @@ module.exports = {
         } catch (e) {
             throw(e);
         }
+    },
+
+    changePassword: async (passwordInfo) => {
+        try {
+            const hashPassword = await bcrypt.hash(passwordInfo.password, 10);
+            return await db.collection("user").updateOne({ email: passwordInfo.email}, {
+                $set: { password: hashPassword } });
+        } catch(e) {
+            throw(e);
+        } 
     }
 };  

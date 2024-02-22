@@ -52,11 +52,15 @@ module.exports = {
 
     sendEmail: async (req, res) => {
         try {
+            const { email } = req.body;
             const authNumber = Math.random().toString().substring(2, 6);
             res.cookie("auth", authNumber, {
                 maxAge: 10 * 6000 * 5
             });
-            const { email } = req.body;
+            // 비밀번호 변경 시 사용자 정보 쿠키에 저장: 만료시간 10분
+            res.cookie("email", email, {
+                maxAge: 10 * 6000 * 10
+            });
             const emailInfo = {
                 toEmail: email,
                 subject: "작심하루 이메일 인증번호 발송 메일입니다.",
@@ -83,6 +87,25 @@ module.exports = {
                 return res.status(200).json({ result: "인증번호가 일치합니다." });
             } else {
                 return res.status(401).json({ result: "인증번호가 일치하지 않습니다." });
+            }
+        } catch(e) {
+            return res.status(500).json({ error: e.message });
+        }
+    },
+
+    changePassword: async (req, res) => {
+        try {
+            if (!req.body.password) {
+                return res.status(400).json({ result: "비밀번호 미입력" });
+            } else if (!req.cookies.email) {
+                return res.status(400).json({ result: "비밀번호 변경 시간 만료" });
+            } else {
+                const passwordInfo = {
+                    password: req.body.password,
+                    email: req.cookies.email
+                };
+                const result = await userService.changePassword(passwordInfo);
+                return res.status(200).json({ result: "비밀번호 변경 성공" });
             }
         } catch(e) {
             return res.status(500).json({ error: e.message });
