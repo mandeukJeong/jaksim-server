@@ -7,10 +7,12 @@ const connectDB = require('./db/connect.js');
 const methodOverride = require('method-override');
 const passport = require("passport");
 const passportConfig = require("./module/passport.js");
+const cookieParser = require("cookie-parser")
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride('_method'));
+app.use(cookieParser());
 app.use(passport.initialize());
 passportConfig();
 

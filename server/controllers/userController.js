@@ -72,5 +72,20 @@ module.exports = {
                 return res.status(500).json({ error: e.message });
             }
         }
+    },
+
+    checkAuth: async (req, res) => {
+        try {
+            const userAuthNum = req.body.authNum;
+            const cookieAuthNum = req.cookies.auth;
+
+            if (userAuthNum === cookieAuthNum) {
+                return res.status(200).json({ result: "인증번호가 일치합니다." });
+            } else {
+                return res.status(401).json({ result: "인증번호가 일치하지 않습니다." });
+            }
+        } catch(e) {
+            return res.status(500).json({ error: e.message });
+        }
     }
 }
