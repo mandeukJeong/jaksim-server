@@ -1,6 +1,7 @@
 const bcrypt = require("bcrypt");
 const connectDB = require("../db/connect");
 const mailer = require("../module/mail");
+const { ObjectId } = require("mongodb");
 
 let db;
 connectDB.then((client) => {
@@ -50,10 +51,18 @@ module.exports = {
     changePassword: async (passwordInfo) => {
         try {
             const hashPassword = await bcrypt.hash(passwordInfo.password, 10);
-            return await db.collection("user").updateOne({ email: passwordInfo.email}, {
+            return await db.collection("user").updateOne({ email: passwordInfo.email }, {
                 $set: { password: hashPassword } });
         } catch(e) {
             throw(e);
         } 
+    },
+
+    getUser: async (id) => {
+        try {
+            return await db.collection("user").findOne({ _id: new ObjectId(id) });
+        } catch(e) {
+            throw(e);
+        }
     }
 };  

@@ -42,6 +42,9 @@ module.exports = {
                         return res.send(err);
                     }
                     const token = jwt.sign({ id: user.email }, process.env.JWT_SECRET_KEY, { expiresIn: "1h" });
+                    res.cookie("user", user._id, {
+                        maxAge: 10 * 6000 * 10
+                    });
                     res.status(200).json({token});
                 });
             })(req, res, next);
@@ -104,8 +107,25 @@ module.exports = {
                     password: req.body.password,
                     email: req.cookies.email
                 };
-                const result = await userService.changePassword(passwordInfo);
+                await userService.changePassword(passwordInfo);
                 return res.status(200).json({ result: "비밀번호 변경 성공" });
+            }
+        } catch(e) {
+            return res.status(500).json({ error: e.message });
+        }
+    },
+
+    getUser: async (req, res) => {
+        try {
+            if (!req.cookies.user) {
+                return res.status(401).json({ result: "로그인 시간이 만료되었습니다." });
+            } else {
+                const user = await userService.getUser(req.cookies.user);
+                return res.status(200).json({ result: {
+                    email: user.email,
+                    nickname: user.nickname,
+                    eventCheck: user.eventCheck
+                }});
             }
         } catch(e) {
             return res.status(500).json({ error: e.message });
