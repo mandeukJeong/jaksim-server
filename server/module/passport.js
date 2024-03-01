@@ -13,7 +13,6 @@ connectDB
 
 const cookieExtractor = (req) => {
   const { auth } = req.cookies;
-  console.log(auth);
   return auth;
 };
 
