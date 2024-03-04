@@ -132,6 +132,8 @@ module.exports = {
           email: req.cookies.email,
         };
         await userService.changePassword(passwordInfo);
+        res.clearCookie('verify');
+        res.clearCookie('email');
         return res.status(200).json({ message: '비밀번호 변경 성공' });
       }
     } catch (e) {
