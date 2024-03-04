@@ -79,10 +79,12 @@ module.exports = {
       const verifyNumber = Math.random().toString().substring(2, 6);
       res.cookie('verify', verifyNumber, {
         maxAge: 1000 * 60 * 5,
+        httpOnly: true,
       });
       // 비밀번호 변경 시 사용자 정보 쿠키에 저장: 만료시간 10분
       res.cookie('email', email, {
         maxAge: 1000 * 60 * 10,
+        httpOnly: true,
       });
       const emailInfo = {
         toEmail: email,
