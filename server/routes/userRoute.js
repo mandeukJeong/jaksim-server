@@ -13,5 +13,10 @@ router.get(
   userController.getUser
 );
 router.get('/refresh', userController.refreshUser);
+router.get(
+  '/logout',
+  passport.authenticate('jwt', { session: false }),
+  userController.logout
+);
 
 module.exports = router;
