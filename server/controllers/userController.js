@@ -65,7 +65,13 @@ module.exports = {
             // https로 배포했을 경우 적용
             // secure: true
           });
-          res.status(200).json({ accessToken });
+          console.log(user);
+          res.status(200).json({
+            accessToken,
+            email: user.email,
+            nickname: user.nickname,
+            eventCheck: user.eventCheck,
+          });
         });
       })(req, res, next);
     } catch (e) {
@@ -145,11 +151,9 @@ module.exports = {
     try {
       const user = await userService.getUser(req.cookies.user);
       return res.status(200).json({
-        data: {
-          email: user.email,
-          nickname: user.nickname,
-          eventCheck: user.eventCheck,
-        },
+        email: user.email,
+        nickname: user.nickname,
+        eventCheck: user.eventCheck,
       });
     } catch (e) {
       return res.status(500).json({ error: e.message });
