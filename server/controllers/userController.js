@@ -154,6 +154,7 @@ module.exports = {
         email: user.email,
         nickname: user.nickname,
         eventCheck: user.eventCheck,
+        authId: user.authId,
       });
     } catch (e) {
       return res.status(500).json({ error: e.message });
