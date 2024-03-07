@@ -30,6 +30,7 @@ module.exports = {
           nickname: userInfo.nickname,
           password: hashPassword,
           eventCheck: userInfo.eventCheck,
+          authId: 1,
         });
       }
     } catch (e) {

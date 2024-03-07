@@ -70,6 +70,7 @@ module.exports = {
             email: user.email,
             nickname: user.nickname,
             eventCheck: user.eventCheck,
+            authId: user.authId,
           });
         });
       })(req, res, next);
@@ -191,14 +192,13 @@ module.exports = {
             // https로 배포했을 경우 적용
             // secure: true
           });
-          res
-            .status(200)
-            .json({
-              accessToken,
-              email: user.email,
-              nickname: user.nickname,
-              eventCheck: user.eventCheck,
-            });
+          res.status(200).json({
+            accessToken,
+            email: user.email,
+            nickname: user.nickname,
+            eventCheck: user.eventCheck,
+            authId: user.authId,
+          });
         });
       })(req, res);
     } catch (e) {
