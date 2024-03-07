@@ -9,6 +9,7 @@ const passport = require('passport');
 const passportConfig = require('./module/passport.js');
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
+const path = require('path');
 
 app.use(express.json());
 app.use(cors());
@@ -16,6 +17,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride('_method'));
 app.use(cookieParser());
 app.use(passport.initialize());
+app.use(express.static(path.join(__dirname, 'front/build')));
 passportConfig();
 
 let db;
@@ -42,3 +44,7 @@ app.get(
     res.send(result);
   }
 );
+
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '/front/build/index.html'));
+});
