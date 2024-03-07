@@ -65,7 +65,6 @@ module.exports = {
             // https로 배포했을 경우 적용
             // secure: true
           });
-          console.log(user);
           res.status(200).json({
             accessToken,
             email: user.email,
@@ -192,7 +191,14 @@ module.exports = {
             // https로 배포했을 경우 적용
             // secure: true
           });
-          res.status(200).json({ accessToken });
+          res
+            .status(200)
+            .json({
+              accessToken,
+              email: user.email,
+              nickname: user.nickname,
+              eventCheck: user.eventCheck,
+            });
         });
       })(req, res);
     } catch (e) {
