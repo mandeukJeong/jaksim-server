@@ -34,15 +34,10 @@ connectDB
   });
 
 app.use('/user', require('./routes/userRoute.js'));
-
-// token test
-app.get(
-  '/test',
+app.use(
+  '/board',
   passport.authenticate('jwt', { session: false }),
-  async (req, res) => {
-    const result = await db.collection('test').find().toArray();
-    res.send(result);
-  }
+  require('./routes/boardRoute.js')
 );
 
 app.get('*', (req, res) => {
